@@ -1290,7 +1290,7 @@ namespace RSTE
         private void refreshSpeciesAbility(object sender, EventArgs e)
         {
             int i = Array.IndexOf(trpk_pkm, sender as ComboBox);
-            setForms(trpk_form[i].SelectedIndex, trpk_form[i]);
+            setForms(trpk_pkm[i].SelectedIndex, trpk_form[i]);
             refreshPKMSlotAbility(i);
         }
         private void refreshPKMSlotAbility(int slot)
@@ -1298,6 +1298,7 @@ namespace RSTE
             int species = trpk_pkm[slot].SelectedIndex;
             uint[] abils = { 0, 0, 0 };
             int formnum = trpk_form[slot].SelectedIndex;
+            if (formnum == 0) goto end;
             // Previous Games
             if (species == 492 && formnum == 1) { species = 727; } // Shaymin Sky
             else if (species == 487 && formnum == 1) { species = 728; } // Giratina-O
@@ -1363,12 +1364,14 @@ namespace RSTE
             else if (species == 475 && formnum == 1) { species = 803; } // Mega Gallade
             else if (species == 531 && formnum == 1) { species = 804; } // Mega Audino
             else if (species == 719 && formnum == 1) { species = 810; } // Mega Diancie
+
+          end:
             Array.Copy(speciesability, species * 4 + 1, abils, 0, 3);
             trpk_abil[slot].Items.Clear();
             trpk_abil[slot].Items.Add("Any (1 or 2)");
-            trpk_abil[slot].Items.Add(abilitylist[abils[0]]);
-            trpk_abil[slot].Items.Add(abilitylist[abils[1]]);
-            trpk_abil[slot].Items.Add(abilitylist[abils[2]]);
+            trpk_abil[slot].Items.Add(abilitylist[abils[0]] + " (1)");
+            trpk_abil[slot].Items.Add(abilitylist[abils[1]] + " (2)");
+            trpk_abil[slot].Items.Add(abilitylist[abils[2]] + " (H)");
             trpk_abil[slot].SelectedIndex = 0;
         }
         // Set Loading
@@ -1377,11 +1380,10 @@ namespace RSTE
             if (start || loading) return;
             int pkm = CB_numPokemon.SelectedIndex;
             {
-                for (int i = 0; i < pkm; i++) // enable all if the pkm exists
+                for (int i = 0; i < 6; i++) // enable all if the pkm exists
                 {
                     trpk_pkm[i].Enabled =
                     trpk_gender[i].Enabled =
-                    trpk_form[i].Enabled =
                     trpk_abil[i].Enabled =
                     trpk_IV[i].Enabled =
                     trpk_lvl[i].Enabled = (i < pkm);
@@ -1392,9 +1394,7 @@ namespace RSTE
                     trpk_m2[i].Enabled =
                     trpk_m3[i].Enabled =
                     trpk_m4[i].Enabled = (i < pkm) && (checkBox_Moves.Checked);
-                }
-                for (int i = 0; i < 6; i++)
-                {
+
                     if (!trpk_pkm[i].Enabled)
                     {
                         trpk_pkm[i].SelectedIndex =
@@ -1416,6 +1416,8 @@ namespace RSTE
                         trpk_m4[i].SelectedIndex = 0;
                     }
                 }
+                for (int i = pkm; i < 6; i++)
+                    trpk_form[i].Enabled = false;
             }
         }
 
@@ -1533,7 +1535,7 @@ namespace RSTE
                     byte PID = br.ReadByte();
                     trpk_lvl[i].SelectedIndex = br.ReadUInt16();
                     trpk_pkm[i].SelectedIndex = br.ReadUInt16();
-                    setForms(trpk_form[i].SelectedIndex, trpk_form[i]);
+                    setForms(trpk_pkm[i].SelectedIndex, trpk_form[i]);
                     trpk_form[i].SelectedIndex = br.ReadUInt16();
                     refreshPKMSlotAbility(i); // Repopulate Abilities
 
@@ -1563,32 +1565,32 @@ namespace RSTE
         {
             // fetch trainer format we're saving as
             int index = CB_TrainerID.SelectedIndex;
-            ushort format = (ushort)(Convert.ToByte(checkBox_Item.Checked) + Convert.ToByte(checkBox_Moves.Checked) << 1);
+            ushort format = (ushort)(Convert.ToByte(checkBox_Moves.Checked) + Convert.ToByte(checkBox_Item.Checked) << 1);
 
             // Write Trainer Data
             using (MemoryStream ms = new MemoryStream())
             using (BinaryWriter bw = new BinaryWriter(ms))
             {
                 bw.BaseStream.Position = 0;
-                bw.Write((ushort)format);
-                bw.Write((ushort)CB_Trainer_Class.SelectedIndex);
+                bw.Write(BitConverter.GetBytes((ushort)format));
+                bw.Write(BitConverter.GetBytes((ushort)CB_Trainer_Class.SelectedIndex));
                 bw.Write((byte)0);
                 bw.Write((byte)0);
                 bw.Write((byte)CB_Battle_Type.SelectedIndex);
                 bw.Write((byte)CB_numPokemon.SelectedIndex);
-                bw.Write((ushort)CB_Item_1.SelectedIndex);
-                bw.Write((ushort)CB_Item_2.SelectedIndex);
-                bw.Write((ushort)CB_Item_3.SelectedIndex);
-                bw.Write((ushort)CB_Item_4.SelectedIndex);
+                bw.Write(BitConverter.GetBytes((ushort)CB_Item_1.SelectedIndex));
+                bw.Write(BitConverter.GetBytes((ushort)CB_Item_2.SelectedIndex));
+                bw.Write(BitConverter.GetBytes((ushort)CB_Item_3.SelectedIndex));
+                bw.Write(BitConverter.GetBytes((ushort)CB_Item_4.SelectedIndex));
                 bw.Write((byte)CB_AI.SelectedIndex);
                 bw.Write((byte)0);
                 bw.Write((byte)0);
                 bw.Write((byte)0);
                 bw.Write((byte)Convert.ToByte(checkBox_Healer.Checked));
                 bw.Write((byte)CB_Money.SelectedIndex);
-                bw.Write((ushort)CB_Prize.SelectedIndex);
+                bw.Write(BitConverter.GetBytes((ushort)CB_Prize.SelectedIndex));
 
-                File.WriteAllBytes(trpokepaths[index], ms.ToArray());
+                File.WriteAllBytes(trdatapaths[index], ms.ToArray());
             }
             // Load Pokemon Data
             using (MemoryStream ms = new MemoryStream())
@@ -1600,19 +1602,19 @@ namespace RSTE
                     bw.Write((byte)trpk_IV[i].SelectedIndex);
                     byte PID = (byte)((trpk_abil[i].SelectedIndex << 4) + trpk_gender[i].SelectedIndex);
                     bw.Write((byte)PID);
-                    bw.Write((ushort)trpk_lvl[i].SelectedIndex);
+                    bw.Write(BitConverter.GetBytes((ushort)trpk_lvl[i].SelectedIndex));
 
-                    bw.Write((ushort)trpk_pkm[i].SelectedIndex);
-                    bw.Write((ushort)trpk_form[i].SelectedIndex);
+                    bw.Write(BitConverter.GetBytes((ushort)trpk_pkm[i].SelectedIndex));
+                    bw.Write(BitConverter.GetBytes((ushort)trpk_form[i].SelectedIndex));
 
-                    if (((format >> 1) & 1) == 1) // Items Exist in Data
-                        bw.Write((ushort)trpk_item[i].SelectedIndex);
-                    if (((format) & 1) == 1) // Moves Exist in Data
+                    if (((format) & 1) == 1) // Items Exist in Data
+                        bw.Write(BitConverter.GetBytes((ushort)trpk_item[i].SelectedIndex));
+                    if (((format >> 1) & 1) == 1) // Moves Exist in Data
                     {
-                        bw.Write((ushort)trpk_m1[i].SelectedIndex);
-                        bw.Write((ushort)trpk_m2[i].SelectedIndex);
-                        bw.Write((ushort)trpk_m3[i].SelectedIndex);
-                        bw.Write((ushort)trpk_m4[i].SelectedIndex);
+                        bw.Write(BitConverter.GetBytes((ushort)trpk_m1[i].SelectedIndex));
+                        bw.Write(BitConverter.GetBytes((ushort)trpk_m2[i].SelectedIndex));
+                        bw.Write(BitConverter.GetBytes((ushort)trpk_m3[i].SelectedIndex));
+                        bw.Write(BitConverter.GetBytes((ushort)trpk_m4[i].SelectedIndex));
                     }
                 }
                 File.WriteAllBytes(trpokepaths[index],ms.ToArray());
@@ -1720,12 +1722,12 @@ namespace RSTE
                     trpk_item[i].Items.Add(s);
 
                 trpk_lvl[i].Items.Clear();
-                for (int z = 0; z < 100; z++)
-                    trpk_lvl[i].Items.Add(z + 1);
+                for (int z = 0; z <= 100; z++)
+                    trpk_lvl[i].Items.Add((z).ToString());
 
                 trpk_IV[i].Items.Clear();
                 for (int z = 0; z < 256; z++)
-                    trpk_IV[i].Items.Add(z);
+                    trpk_IV[i].Items.Add(z.ToString());
 
                 trpk_gender[i].Items.Clear();
                 trpk_gender[i].Items.Add("♂ / M");
@@ -1763,7 +1765,7 @@ namespace RSTE
 
             CB_AI.Items.Clear(); CB_Money.Items.Clear();
             for (int i = 0; i < 256; i++)
-            { CB_AI.Items.Add(i); CB_Money.Items.Add(i); }
+            { CB_AI.Items.Add(i.ToString()); CB_Money.Items.Add(i.ToString()); }
 
             CB_Battle_Type.Items.Clear();
             CB_Battle_Type.Items.Add("Single");
