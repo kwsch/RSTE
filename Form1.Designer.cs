@@ -323,7 +323,6 @@
             // checkBox_Healer
             // 
             this.checkBox_Healer.AutoSize = true;
-            this.checkBox_Healer.Enabled = false;
             this.checkBox_Healer.Location = new System.Drawing.Point(7, 35);
             this.checkBox_Healer.Name = "checkBox_Healer";
             this.checkBox_Healer.Size = new System.Drawing.Size(57, 17);
@@ -344,7 +343,6 @@
             // 
             this.CB_Prize.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Prize.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Prize.Enabled = false;
             this.CB_Prize.FormattingEnabled = true;
             this.CB_Prize.Items.AddRange(new object[] {
             "???",
@@ -1141,7 +1139,6 @@
             // 
             this.CB_AI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_AI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_AI.Enabled = false;
             this.CB_AI.FormattingEnabled = true;
             this.CB_AI.Location = new System.Drawing.Point(66, 100);
             this.CB_AI.Name = "CB_AI";
@@ -1161,7 +1158,6 @@
             // 
             this.CB_Money.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Money.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Money.Enabled = false;
             this.CB_Money.FormattingEnabled = true;
             this.CB_Money.Location = new System.Drawing.Point(195, 100);
             this.CB_Money.Name = "CB_Money";
@@ -1181,7 +1177,6 @@
             // 
             this.CB_Battle_Type.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Battle_Type.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Battle_Type.Enabled = false;
             this.CB_Battle_Type.FormattingEnabled = true;
             this.CB_Battle_Type.Items.AddRange(new object[] {
             "Single Battle",
@@ -1207,7 +1202,6 @@
             // 
             this.CB_Trainer_Class.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Trainer_Class.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Trainer_Class.Enabled = false;
             this.CB_Trainer_Class.FormattingEnabled = true;
             this.CB_Trainer_Class.Location = new System.Drawing.Point(156, 46);
             this.CB_Trainer_Class.Name = "CB_Trainer_Class";
@@ -1217,7 +1211,6 @@
             // checkBox_Moves
             // 
             this.checkBox_Moves.AutoSize = true;
-            this.checkBox_Moves.Enabled = false;
             this.checkBox_Moves.Location = new System.Drawing.Point(7, 58);
             this.checkBox_Moves.Name = "checkBox_Moves";
             this.checkBox_Moves.Size = new System.Drawing.Size(58, 17);
@@ -1229,7 +1222,6 @@
             // checkBox_Item
             // 
             this.checkBox_Item.AutoSize = true;
-            this.checkBox_Item.Enabled = false;
             this.checkBox_Item.Location = new System.Drawing.Point(7, 81);
             this.checkBox_Item.Name = "checkBox_Item";
             this.checkBox_Item.Size = new System.Drawing.Size(51, 17);
@@ -1251,7 +1243,6 @@
             // 
             this.CB_Item_4.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Item_4.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Item_4.Enabled = false;
             this.CB_Item_4.FormattingEnabled = true;
             this.CB_Item_4.Items.AddRange(new object[] {
             "???",
@@ -2048,7 +2039,6 @@
             // 
             this.CB_Item_3.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Item_3.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Item_3.Enabled = false;
             this.CB_Item_3.FormattingEnabled = true;
             this.CB_Item_3.Items.AddRange(new object[] {
             "???",
@@ -2845,7 +2835,6 @@
             // 
             this.CB_Item_2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Item_2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Item_2.Enabled = false;
             this.CB_Item_2.FormattingEnabled = true;
             this.CB_Item_2.Items.AddRange(new object[] {
             "???",
@@ -3642,7 +3631,6 @@
             // 
             this.CB_Item_1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_Item_1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_Item_1.Enabled = false;
             this.CB_Item_1.FormattingEnabled = true;
             this.CB_Item_1.Items.AddRange(new object[] {
             "???",
@@ -4439,7 +4427,6 @@
             // 
             this.CB_numPokemon.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CB_numPokemon.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CB_numPokemon.Enabled = false;
             this.CB_numPokemon.FormattingEnabled = true;
             this.CB_numPokemon.Items.AddRange(new object[] {
             "0",

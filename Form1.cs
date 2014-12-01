@@ -14,6 +14,7 @@ namespace RSTE
     {
         public Form1()
         {
+            InitializeComponent();
             #region Combo Box Arrays
             trpk_pkm = new ComboBox[] 
             {
@@ -948,7 +949,6 @@ namespace RSTE
             this.AllowDrop = true;
             this.DragEnter += new DragEventHandler(tabMain_DragEnter);
             this.DragDrop += new DragEventHandler(tabMain_DragDrop);
-            InitializeComponent();
             (new ToolTip()).SetToolTip(B_OpenTRDATA, "trdata @ a/0/3/6");
             (new ToolTip()).SetToolTip(B_OpenTRPOKE, "trpoke @ a/0/3/8");
         }
@@ -978,10 +978,309 @@ namespace RSTE
         private ComboBox[] trpk_form;
         private ComboBox[] trpk_gender;
         private ushort[] speciesability;
-        private string[] AbilityList, MoveList, ItemList, SpeciesList;
-        private string[] TrainerNames, TrainerClasses;
+        private string[] abilitylist, movelist, itemlist, specieslist, types, forms;
+        private string[] trName, trClass;
         #endregion
 
+        // Form Loading
+        public void setForms(int species, ComboBox cb)
+        {
+            // Form Tables
+            // 
+            var form_unown = new[] {
+                    new { Text = "A", Value = 0 },
+                    new { Text = "B", Value = 1 },
+                    new { Text = "C", Value = 2 },
+                    new { Text = "D", Value = 3 },
+                    new { Text = "E", Value = 4 },
+                    new { Text = "F", Value = 5 },
+                    new { Text = "G", Value = 6 },
+                    new { Text = "H", Value = 7 },
+                    new { Text = "I", Value = 8 },
+                    new { Text = "J", Value = 9 },
+                    new { Text = "K", Value = 10 },
+                    new { Text = "L", Value = 11 },
+                    new { Text = "M", Value = 12 },
+                    new { Text = "N", Value = 13 },
+                    new { Text = "O", Value = 14 },
+                    new { Text = "P", Value = 15 },
+                    new { Text = "Q", Value = 16 },
+                    new { Text = "R", Value = 17 },
+                    new { Text = "S", Value = 18 },
+                    new { Text = "T", Value = 19 },
+                    new { Text = "U", Value = 20 },
+                    new { Text = "V", Value = 21 },
+                    new { Text = "W", Value = 22 },
+                    new { Text = "X", Value = 23 },
+                    new { Text = "Y", Value = 24 },
+                    new { Text = "Z", Value = 25 },
+                    new { Text = "!", Value = 26 },
+                    new { Text = "?", Value = 27 },
+                };
+            var form_castform = new[] {
+                    new { Text = types[0], Value = 0 }, // Normal
+                    new { Text = forms[789], Value = 1 }, // Sunny
+                    new { Text = forms[790], Value = 2 }, // Rainy
+                    new { Text = forms[791], Value = 3 }, // Snowy
+                };
+            var form_shellos = new[] {
+                    new { Text = forms[422], Value = 0 }, // West
+                    new { Text = forms[811], Value = 1 }, // East
+                };
+            var form_deoxys = new[] {
+                    new { Text = types[0], Value = 0 }, // Normal
+                    new { Text = forms[802], Value = 1 }, // Attack
+                    new { Text = forms[803], Value = 2 }, // Defense
+                    new { Text = forms[804], Value = 3 }, // Speed
+                };
+            var form_burmy = new[] {
+                    new { Text = forms[412], Value = 0 }, // Plant
+                    new { Text = forms[805], Value = 1 }, // Sandy
+                    new { Text = forms[806], Value = 2 }, // Trash
+                };
+            var form_cherrim = new[] {
+                    new { Text = forms[421], Value = 0 }, // Overcast
+                    new { Text = forms[809], Value = 1 }, // Sunshine
+                };
+            var form_rotom = new[] {
+                    new { Text = types[0], Value = 0 }, // Normal
+                    new { Text = forms[817], Value = 1 }, // Heat
+                    new { Text = forms[818], Value = 2 }, // Wash
+                    new { Text = forms[819], Value = 3 }, // Frost
+                    new { Text = forms[820], Value = 4 }, // Fan
+                    new { Text = forms[821], Value = 5 }, // Mow
+                };
+            var form_giratina = new[] {
+                    new { Text = forms[487], Value = 0 }, // Altered
+                    new { Text = forms[822], Value = 1 }, // Origin
+                };
+            var form_shaymin = new[] {
+                    new { Text = forms[492], Value = 0 }, // Land
+                    new { Text = forms[823], Value = 1 }, // Sky
+                };
+            var form_arceus = new[] {
+                    new { Text = types[0], Value = 0 }, // Normal
+                    new { Text = types[1], Value = 1 }, // Fighting
+                    new { Text = types[2], Value = 2 }, // Flying
+                    new { Text = types[3], Value = 3 }, // Poison
+                    new { Text = types[4], Value = 4 }, // etc
+                    new { Text = types[5], Value = 5 },
+                    new { Text = types[6], Value = 6 },
+                    new { Text = types[7], Value = 7 },
+                    new { Text = types[8], Value = 8 },
+                    new { Text = types[9], Value = 9 },
+                    new { Text = types[10], Value = 10 },
+                    new { Text = types[11], Value = 11 },
+                    new { Text = types[12], Value = 12 },
+                    new { Text = types[13], Value = 13 },
+                    new { Text = types[14], Value = 14 },
+                    new { Text = types[15], Value = 15 },
+                    new { Text = types[16], Value = 16 },
+                    new { Text = types[17], Value = 17 },
+                };
+            var form_basculin = new[] {
+                    new { Text = forms[550], Value = 0 }, // Red
+                    new { Text = forms[842], Value = 1 }, // Blue
+                };
+            var form_darmanitan = new[] {
+                    new { Text = forms[555], Value = 0 }, // Standard
+                    new { Text = forms[843], Value = 1 }, // Zen
+                };
+            var form_deerling = new[] {
+                    new { Text = forms[585], Value = 0 }, // Spring
+                    new { Text = forms[844], Value = 1 }, // Summer
+                    new { Text = forms[845], Value = 2 }, // Autumn
+                    new { Text = forms[846], Value = 3 }, // Winter
+                };
+            var form_gender = new[] {
+                    new { Text = "♂", Value = 0 }, // Male
+                    new { Text = "♀", Value = 1 }, // Female
+                };
+            var form_therian = new[] {
+                    new { Text = forms[641], Value = 0 }, // Incarnate
+                    new { Text = forms[852], Value = 1 }, // Therian
+                };
+            var form_kyurem = new[] {
+                    new { Text = types[0], Value = 0 }, // Normal
+                    new { Text = forms[853], Value = 1 }, // White
+                    new { Text = forms[854], Value = 2 }, // Black
+                };
+            var form_keldeo = new[] {
+                    new { Text = forms[647], Value = 0 }, // Ordinary
+                    new { Text = forms[855], Value = 1 }, // Resolute
+                };
+            var form_meloetta = new[] {
+                    new { Text = forms[648], Value = 0 }, // Aria
+                    new { Text = forms[856], Value = 1 }, // Pirouette
+                };
+            var form_genesect = new[] {
+                    new { Text = types[0], Value = 0 }, // Normal
+                    new { Text = types[10], Value = 1 }, // Douse
+                    new { Text = types[12], Value = 2 }, // Shock
+                    new { Text = types[9], Value = 3 }, // Burn
+                    new { Text = types[14], Value = 4 }, // Chill
+                };
+            var form_flabebe = new[] {
+                    new { Text = forms[669], Value = 0 }, // Red
+                    new { Text = forms[884], Value = 1 }, // Yellow
+                    new { Text = forms[885], Value = 2 }, // Orange
+                    new { Text = forms[886], Value = 3 }, // Blue
+                    new { Text = forms[887], Value = 4 }, // White
+                };
+            var form_floette = new[] {
+                    new { Text = forms[669], Value = 0 }, // Red
+                    new { Text = forms[884], Value = 1 }, // Yellow
+                    new { Text = forms[885], Value = 2 }, // Orange
+                    new { Text = forms[886], Value = 3 }, // Blue
+                    new { Text = forms[887], Value = 4 }, // White
+                    new { Text = forms[888], Value = 5 }, // Eternal
+                };
+            var form_furfrou = new[] {
+                    new { Text = forms[676], Value = 0 }, // Natural
+                    new { Text = forms[893], Value = 1 }, // Heart
+                    new { Text = forms[894], Value = 2 }, // Star
+                    new { Text = forms[895], Value = 3 }, // Diamond
+                    new { Text = forms[896], Value = 4 }, // Deputante
+                    new { Text = forms[897], Value = 5 }, // Matron
+                    new { Text = forms[898], Value = 6 }, // Dandy
+                    new { Text = forms[899], Value = 7 }, // La Reine
+                    new { Text = forms[900], Value = 8 }, // Kabuki 
+                    new { Text = forms[901], Value = 9 }, // Pharaoh
+                };
+            var form_aegislash = new[] {
+                    new { Text = forms[681], Value = 0 }, // Shield
+                    new { Text = forms[903], Value = 1 }, // Blade
+                };
+            var form_butterfly = new[] {
+                    new { Text = forms[666], Value = 0 }, // Icy Snow
+                    new { Text = forms[861], Value = 1 }, // Polar
+                    new { Text = forms[862], Value = 2 }, // Tundra
+                    new { Text = forms[863], Value = 3 }, // Continental 
+                    new { Text = forms[864], Value = 4 }, // Garden
+                    new { Text = forms[865], Value = 5 }, // Elegant
+                    new { Text = forms[866], Value = 6 }, // Meadow
+                    new { Text = forms[867], Value = 7 }, // Modern 
+                    new { Text = forms[868], Value = 8 }, // Marine
+                    new { Text = forms[869], Value = 9 }, // Archipelago
+                    new { Text = forms[870], Value = 10 }, // High-Plains
+                    new { Text = forms[871], Value = 11 }, // Sandstorm
+                    new { Text = forms[872], Value = 12 }, // River
+                    new { Text = forms[873], Value = 13 }, // Monsoon
+                    new { Text = forms[874], Value = 14 }, // Savannah 
+                    new { Text = forms[875], Value = 15 }, // Sun
+                    new { Text = forms[876], Value = 16 }, // Ocean
+                    new { Text = forms[877], Value = 17 }, // Jungle
+                    new { Text = forms[878], Value = 18 }, // Fancy
+                    new { Text = forms[879], Value = 19 }, // Poké Ball
+                };
+            var form_list = new[] {
+                    new { Text = "", Value = 0}, // None
+                };
+            var form_pump = new[] {
+                    new { Text = forms[904], Value = 0 }, // Small
+                    new { Text = forms[710], Value = 1 }, // Average
+                    new { Text = forms[905], Value = 2 }, // Large
+                    new { Text = forms[907], Value = 3 }, // Super
+                };
+            var form_mega = new[] {
+                    new { Text = types[0], Value = 0}, // Normal
+                    new { Text = forms[723], Value = 1}, // Mega
+                };
+            var form_megaxy = new[] {
+                    new { Text = types[0], Value = 0}, // Normal
+                    new { Text = forms[724], Value = 1}, // Mega X
+                    new { Text = forms[725], Value = 2}, // Mega Y
+                };
+
+            var form_primal = new[] {
+                    new { Text = types[0], Value = 0},
+                    new { Text = forms[800], Value = 1},
+                };
+            var form_hoopa = new[] {
+                    new { Text = types[0], Value = 0},
+                    new { Text = forms[912], Value = 1},
+                };
+            var form_pikachu = new[] {
+                    new { Text = types[0], Value = 0}, // Normal
+                    new { Text = forms[729], Value = 1}, // Rockstar
+                    new { Text = forms[730], Value = 2}, // Belle
+                    new { Text = forms[731], Value = 3}, // Pop
+                    new { Text = forms[732], Value = 4}, // PhD
+                    new { Text = forms[733], Value = 5}, // Libre
+                    new { Text = forms[734], Value = 6}, // Cosplay
+                };
+
+            cb.DataSource = form_list;
+            cb.DisplayMember = "Text";
+            cb.ValueMember = "Value";
+
+            // Mega List
+            int[] mspec = {     // XY
+                                   003, 009, 065, 094, 115, 127, 130, 142, 181, 212, 214, 229, 248, 257, 282, 303, 306, 308, 310, 354, 359, 380, 381, 445, 448, 460, 
+                                // ORAS
+                                015, 018, 080, 208, 254, 260, 302, 319, 323, 334, 362, 373, 376, 384, 428, 475, 531, 719,
+                          };
+            for (int i = 0; i < mspec.Length; i++)
+            {
+                if (mspec[i] == species)
+                {
+                    cb.DataSource = form_mega;
+                    cb.Enabled = true; // Mega Form Selection
+                    return;
+                }
+            }
+
+            // MegaXY List
+            if ((species == 6) || (species == 150))
+            {
+                cb.DataSource = form_megaxy;
+                cb.Enabled = true; // Mega Form Selection
+                return;
+            }
+
+            // Regular Form List
+            if (species == 025) { form_list = form_pikachu; }
+            else if (species == 201) { form_list = form_unown; }
+            else if (species == 351) { form_list = form_castform; }
+            else if (species == 386) { form_list = form_deoxys; }
+            else if (species == 421) { form_list = form_cherrim; }
+            else if (species == 479) { form_list = form_rotom; }
+            else if (species == 487) { form_list = form_giratina; }
+            else if (species == 492) { form_list = form_shaymin; }
+            else if (species == 493) { form_list = form_arceus; }
+            else if (species == 550) { form_list = form_basculin; }
+            else if (species == 555) { form_list = form_darmanitan; }
+            else if (species == 646) { form_list = form_kyurem; }
+            else if (species == 647) { form_list = form_keldeo; }
+            else if (species == 648) { form_list = form_meloetta; }
+            else if (species == 649) { form_list = form_genesect; }
+            else if (species == 676) { form_list = form_furfrou; }
+            else if (species == 681) { form_list = form_aegislash; }
+            else if (species == 670) { form_list = form_floette; }
+
+            else if ((species == 669) || (species == 671)) { form_list = form_flabebe; }
+            else if ((species == 412) || (species == 413)) { form_list = form_burmy; }
+            else if ((species == 422) || (species == 423)) { form_list = form_shellos; }
+            else if ((species == 585) || (species == 586)) { form_list = form_deerling; }
+            else if ((species == 710) || (species == 711)) { form_list = form_pump; }
+
+            else if ((species == 666) || (species == 665) || (species == 664)) { form_list = form_butterfly; }
+            else if ((species == 592) || (species == 593) || (species == 678)) { form_list = form_gender; }
+            else if ((species == 641) || (species == 642) || (species == 645)) { form_list = form_therian; }
+
+            // ORAS
+            else if (species == 382 || species == 383) { form_list = form_primal; }
+            else if (species == 720) { form_list = form_hoopa; }
+
+            else
+            {
+                cb.Enabled = false;
+                return;
+            };
+
+            cb.DataSource = form_list;
+            cb.Enabled = true;
+        }
         // Ability Loading
         private void refreshFormAbility(object sender, EventArgs e)
         {
@@ -991,6 +1290,7 @@ namespace RSTE
         private void refreshSpeciesAbility(object sender, EventArgs e)
         {
             int i = Array.IndexOf(trpk_pkm, sender as ComboBox);
+            setForms(trpk_form[i].SelectedIndex, trpk_form[i]);
             refreshPKMSlotAbility(i);
         }
         private void refreshPKMSlotAbility(int slot)
@@ -1066,9 +1366,9 @@ namespace RSTE
             Array.Copy(speciesability, species * 4 + 1, abils, 0, 3);
             trpk_abil[slot].Items.Clear();
             trpk_abil[slot].Items.Add("Any (1 or 2)");
-            trpk_abil[slot].Items.Add(AbilityList[abils[0]]);
-            trpk_abil[slot].Items.Add(AbilityList[abils[1]]);
-            trpk_abil[slot].Items.Add(AbilityList[abils[2]]);
+            trpk_abil[slot].Items.Add(abilitylist[abils[0]]);
+            trpk_abil[slot].Items.Add(abilitylist[abils[1]]);
+            trpk_abil[slot].Items.Add(abilitylist[abils[2]]);
             trpk_abil[slot].SelectedIndex = 0;
         }
         // Set Loading
@@ -1096,17 +1396,21 @@ namespace RSTE
                 for (int i = 0; i < 6; i++)
                 if (!trpk_pkm[i].Enabled)
                 {
-                    trpk_pkm[i].SelectedIndex =
-                    trpk_gender[i].SelectedIndex =
-                    trpk_form[i].SelectedIndex =
-                    trpk_abil[i].SelectedIndex =
-                    trpk_IV[i].SelectedIndex =
-                    trpk_lvl[i].SelectedIndex =
-                    trpk_item[i].SelectedIndex =
-                    trpk_m1[i].SelectedIndex =
-                    trpk_m2[i].SelectedIndex =
-                    trpk_m3[i].SelectedIndex =
-                    trpk_m4[i].SelectedIndex = 0;
+                    try
+                    {
+                        trpk_pkm[i].SelectedIndex =
+                        trpk_gender[i].SelectedIndex =
+                        trpk_form[i].SelectedIndex =
+                        trpk_abil[i].SelectedIndex =
+                        trpk_IV[i].SelectedIndex =
+                        trpk_lvl[i].SelectedIndex =
+                        trpk_item[i].SelectedIndex =
+                        trpk_m1[i].SelectedIndex =
+                        trpk_m2[i].SelectedIndex =
+                        trpk_m3[i].SelectedIndex =
+                        trpk_m4[i].SelectedIndex = 0;
+                    }
+                    catch { };
                 }                
             }
         }
@@ -1191,7 +1495,8 @@ namespace RSTE
                     checkBox_Moves.Checked = ((format) & 1) == 1;
 
                     CB_Trainer_Class.SelectedIndex = br.ReadUInt16();
-                    br.ReadUInt16(); // Unknown/Unused
+                    br.ReadByte();
+                    br.ReadByte();
 
                     CB_Battle_Type.SelectedIndex = br.ReadByte();
                     CB_numPokemon.SelectedIndex = br.ReadByte();
@@ -1200,8 +1505,10 @@ namespace RSTE
                     CB_Item_2.SelectedIndex = br.ReadUInt16();
                     CB_Item_3.SelectedIndex = br.ReadUInt16();
                     CB_Item_4.SelectedIndex = br.ReadUInt16();
-                    CB_AI.SelectedIndex = br.ReadUInt16();
-                    br.ReadUInt16(); // Unknown/Unused
+                    CB_AI.SelectedIndex = br.ReadByte();
+                    br.ReadByte();
+                    br.ReadByte();
+                    br.ReadByte();
 
                     checkBox_Healer.Checked = Convert.ToBoolean(br.ReadByte());
                     CB_Money.SelectedIndex = br.ReadByte();
@@ -1219,6 +1526,7 @@ namespace RSTE
                     byte PID = br.ReadByte();
                     trpk_lvl[i].SelectedIndex = br.ReadUInt16();
                     trpk_pkm[i].SelectedIndex = br.ReadUInt16();
+                    setForms(trpk_form[i].SelectedIndex, trpk_form[i]);
                     trpk_form[i].SelectedIndex = br.ReadUInt16();
                     refreshPKMSlotAbility(i); // Repopulate Abilities
 
@@ -1251,26 +1559,33 @@ namespace RSTE
             ushort format = (ushort)(Convert.ToByte(checkBox_Item.Checked) + Convert.ToByte(checkBox_Moves.Checked) << 1);
 
             // Write Trainer Data
-            using (BinaryWriter bw = new BinaryWriter((Stream)File.OpenWrite(trdatapaths[index])))
+            using (MemoryStream ms = new MemoryStream())
+            using (BinaryWriter bw = new BinaryWriter(ms))
             {
                 bw.BaseStream.Position = 0;
                 bw.Write((ushort)format);
                 bw.Write((ushort)CB_Trainer_Class.SelectedIndex);
-                bw.Write((ushort)0);
+                bw.Write((byte)0);
+                bw.Write((byte)0);
                 bw.Write((byte)CB_Battle_Type.SelectedIndex);
                 bw.Write((byte)CB_numPokemon.SelectedIndex);
                 bw.Write((ushort)CB_Item_1.SelectedIndex);
                 bw.Write((ushort)CB_Item_2.SelectedIndex);
                 bw.Write((ushort)CB_Item_3.SelectedIndex);
                 bw.Write((ushort)CB_Item_4.SelectedIndex);
-                bw.Write((ushort)CB_AI.SelectedIndex);
-                bw.Write((ushort)0);
+                bw.Write((byte)CB_AI.SelectedIndex);
+                bw.Write((byte)0);
+                bw.Write((byte)0);
+                bw.Write((byte)0);
                 bw.Write((byte)Convert.ToByte(checkBox_Healer.Checked));
                 bw.Write((byte)CB_Money.SelectedIndex);
                 bw.Write((ushort)CB_Prize.SelectedIndex);
+
+                File.WriteAllBytes(trpokepaths[index], ms.ToArray());
             }
             // Load Pokemon Data
-            using (BinaryWriter bw = new BinaryWriter((Stream)File.OpenRead(trpokepaths[index])))
+            using (MemoryStream ms = new MemoryStream())
+            using (BinaryWriter bw = new BinaryWriter(ms))
             {
                 bw.BaseStream.Position = 0;
                 for (int i = 0; i < CB_numPokemon.SelectedIndex; i++)
@@ -1293,6 +1608,7 @@ namespace RSTE
                         bw.Write((ushort)trpk_m4[i].SelectedIndex);
                     }
                 }
+                File.WriteAllBytes(trpokepaths[index],ms.ToArray());
             }
         }
 
@@ -1323,12 +1639,22 @@ namespace RSTE
             string path = files[0]; // open first D&D
             if (Directory.Exists(path))
             {
-                DialogResult dr = MessageBox.Show("What file did you just drop?\n\nPress Yes for TRDATA, press NO for TRPOKE, else click cancel.","Alert",MessageBoxButtons.YesNoCancel);
-                if (dr == DialogResult.Yes)
-                { trpokepaths = Directory.GetFiles(path); B_OpenTRDATA.Enabled = false; }
-                else if (dr == DialogResult.No)
-                { trdatapaths = Directory.GetFiles(path); B_OpenTRPOKE.Enabled = false; }
-                else return;
+                string a036 = Path.Combine("a", "0", "3", "6");
+                string a038 = Path.Combine("a", "0", "3", "8");
+
+                if (path.IndexOf(a036) > -1)
+                { trdatapaths = Directory.GetFiles(path); B_OpenTRDATA.Enabled = false; }
+                else if (path.IndexOf(a038) > -1)
+                { trpokepaths = Directory.GetFiles(path); B_OpenTRPOKE.Enabled = false; }
+                else
+                {
+                    DialogResult dr = MessageBox.Show("What file did you just drop?\n\nPress Yes for TRDATA, press NO for TRPOKE, else click cancel.", "Alert", MessageBoxButtons.YesNoCancel);
+                    if (dr == DialogResult.Yes)
+                    { trdatapaths = Directory.GetFiles(path); B_OpenTRDATA.Enabled = false; }
+                    else if (dr == DialogResult.No)
+                    { trpokepaths = Directory.GetFiles(path); B_OpenTRPOKE.Enabled = false; }
+                    else return;
+                }
 
                 checkEnabled();
             }
@@ -1355,24 +1681,26 @@ namespace RSTE
                     return;
                 }
             string l = "en";
-            AbilityList = getStringList("Abilities", l);
-            MoveList = getStringList("Moves", l);
-            ItemList = getStringList("Items", l);
-            SpeciesList = getStringList("Species", l);
-            SpeciesList[0] = "---";
-            AbilityList[0] = ItemList[0] = MoveList[0] = "(" + ItemList[0] + ")";
+            abilitylist = getStringList("Abilities", l);
+            movelist = getStringList("Moves", l);
+            itemlist = getStringList("Items", l);
+            specieslist = getStringList("Species", l);
+            forms = getStringList("Forms", l);
+            types = getStringList("Types", l);
+            specieslist[0] = "---";
+            abilitylist[0] = itemlist[0] = movelist[0] = "(" + itemlist[0] + ")";
 
             for (int i = 0; i < 6; i++)
             {
                 trpk_pkm[i].Items.Clear();
-                foreach (string s in SpeciesList)
+                foreach (string s in specieslist)
                     trpk_pkm[i].Items.Add(s);
 
                 trpk_m1[i].Items.Clear();
                 trpk_m2[i].Items.Clear();
                 trpk_m3[i].Items.Clear();
                 trpk_m4[i].Items.Clear();
-                foreach (string s in MoveList)
+                foreach (string s in movelist)
                 {
                     trpk_m1[i].Items.Add(s);
                     trpk_m2[i].Items.Add(s);
@@ -1381,15 +1709,32 @@ namespace RSTE
                 }
 
                 trpk_item[i].Items.Clear();
-                foreach (string s in ItemList)
+                foreach (string s in itemlist)
                     trpk_item[i].Items.Add(s);
+
+                trpk_lvl[i].Items.Clear();
+                for (int z = 0; z < 100; z++)
+                    trpk_lvl[i].Items.Add(z + 1);
+
+                trpk_IV[i].Items.Clear();
+                for (int z = 0; z < 256; z++)
+                    trpk_IV[i].Items.Add(z);
+
+                trpk_gender[i].Items.Clear();
+                trpk_gender[i].Items.Add("♂ / M");
+                trpk_gender[i].Items.Add("♀ / M");
+                trpk_gender[i].Items.Add("- / G");
+
+                trpk_form[i].Items.Add("");
+
+                trpk_pkm[i].SelectedIndex = 0;
             }
             CB_Item_1.Items.Clear();
             CB_Item_2.Items.Clear();
             CB_Item_3.Items.Clear();
             CB_Item_4.Items.Clear();
             CB_Prize.Items.Clear();
-            foreach (string s in ItemList)
+            foreach (string s in itemlist)
             {
                 CB_Item_1.Items.Add(s);
                 CB_Item_2.Items.Add(s);
@@ -1398,16 +1743,27 @@ namespace RSTE
                 CB_Prize.Items.Add(s);
             }
 
-            TrainerNames = getStringList("TrainerNames", l);
-            TrainerClasses = getStringList("TrainerClasses", l);
+            trName = getStringList("TrainerNames", l);
+            trClass = getStringList("TrainerClasses", l);
 
             CB_TrainerID.Items.Clear();
-            for (int i = 0; i < TrainerNames.Length; i++)
-                CB_TrainerID.Items.Add(i.ToString("000") + TrainerNames[i]);
+            for (int i = 0; i < trName.Length; i++)
+                CB_TrainerID.Items.Add(i.ToString("000 - ") + trName[i]);
 
             CB_Trainer_Class.Items.Clear();
-            for (int i = 0; i < TrainerClasses.Length; i++)
-                CB_Trainer_Class.Items.Add(i.ToString("000") + TrainerClasses[i]);
+            for (int i = 0; i < trClass.Length; i++)
+                CB_Trainer_Class.Items.Add(i.ToString("000 - ") + trClass[i]);
+
+            CB_AI.Items.Clear(); CB_Money.Items.Clear();
+            for (int i = 0; i < 256; i++)
+            { CB_AI.Items.Add(i); CB_Money.Items.Add(i); }
+
+            CB_Battle_Type.Items.Clear();
+            CB_Battle_Type.Items.Add("Single");
+            CB_Battle_Type.Items.Add("Double");
+            CB_Battle_Type.Items.Add("Triple");
+            CB_Battle_Type.Items.Add("Rotation");
+            CB_Battle_Type.Items.Add("Horde");
 
             CB_TrainerID.SelectedIndex = 0;
             start = false;
