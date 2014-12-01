@@ -1677,7 +1677,7 @@ namespace RSTE
         }
         private void checkEnabled()
         {
-            tabControl1.Enabled = B_Dump.Enabled = B_SaveEntry.Enabled = CB_TrainerID.Enabled = (!B_OpenTRDATA.Enabled && !B_OpenTRPOKE.Enabled);
+            tabControl1.Enabled = B_SaveEntry.Enabled = CB_TrainerID.Enabled = B_Dump.Enabled = B_Randomize.Enabled = (!B_OpenTRDATA.Enabled && !B_OpenTRPOKE.Enabled);
             if (tabControl1.Enabled)
             {
                 this.AllowDrop = false;
