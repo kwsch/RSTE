@@ -1384,34 +1384,38 @@ namespace RSTE
                     trpk_form[i].Enabled =
                     trpk_abil[i].Enabled =
                     trpk_IV[i].Enabled =
-                    trpk_lvl[i].Enabled = (i < pkm - 1);
+                    trpk_lvl[i].Enabled = (i < pkm);
 
-                    trpk_item[i].Enabled = (i < pkm - 1) && (checkBox_Item.Checked);
+                    trpk_item[i].Enabled = (i < pkm) && (checkBox_Item.Checked);
 
                     trpk_m1[i].Enabled =
                     trpk_m2[i].Enabled =
                     trpk_m3[i].Enabled =
-                    trpk_m4[i].Enabled = (i < pkm - 1) && (checkBox_Moves.Checked);
+                    trpk_m4[i].Enabled = (i < pkm) && (checkBox_Moves.Checked);
                 }
                 for (int i = 0; i < 6; i++)
-                if (!trpk_pkm[i].Enabled)
                 {
-                    try
+                    if (!trpk_pkm[i].Enabled)
                     {
                         trpk_pkm[i].SelectedIndex =
                         trpk_gender[i].SelectedIndex =
                         trpk_form[i].SelectedIndex =
                         trpk_abil[i].SelectedIndex =
                         trpk_IV[i].SelectedIndex =
-                        trpk_lvl[i].SelectedIndex =
-                        trpk_item[i].SelectedIndex =
+                        trpk_lvl[i].SelectedIndex = 0;
+                    }
+                    if (!trpk_item[i].Enabled)
+                    {
+                        trpk_item[i].SelectedIndex = 0;
+                    }
+                    if (!trpk_m1[i].Enabled)
+                    {
                         trpk_m1[i].SelectedIndex =
                         trpk_m2[i].SelectedIndex =
                         trpk_m3[i].SelectedIndex =
                         trpk_m4[i].SelectedIndex = 0;
                     }
-                    catch { };
-                }                
+                }
             }
         }
 
@@ -1478,6 +1482,9 @@ namespace RSTE
             int index = CB_TrainerID.SelectedIndex;
             loading = true;
             int format;
+
+            tabControl1.Enabled = B_SaveEntry.Enabled = (index != 0);
+            if (index == 0) return;
 
             // Load Trainer Data
             using (BinaryReader br = new BinaryReader((Stream) File.OpenRead(trdatapaths[index])))
@@ -1767,6 +1774,8 @@ namespace RSTE
 
             CB_TrainerID.SelectedIndex = 0;
             start = false;
+            readFile();
+            System.Media.SystemSounds.Asterisk.Play();
         }
     }
 }
