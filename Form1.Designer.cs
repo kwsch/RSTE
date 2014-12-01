@@ -197,6 +197,7 @@
             this.CB_Pokemon_6_Level = new System.Windows.Forms.ComboBox();
             this.label55 = new System.Windows.Forms.Label();
             this.CB_Pokemon_6_Pokemon = new System.Windows.Forms.ComboBox();
+            this.B_Randomize = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -210,11 +211,11 @@
             // B_Dump
             // 
             this.B_Dump.Enabled = false;
-            this.B_Dump.Location = new System.Drawing.Point(493, 9);
+            this.B_Dump.Location = new System.Drawing.Point(483, 4);
             this.B_Dump.Name = "B_Dump";
-            this.B_Dump.Size = new System.Drawing.Size(73, 30);
+            this.B_Dump.Size = new System.Drawing.Size(93, 23);
             this.B_Dump.TabIndex = 67;
-            this.B_Dump.Text = "Dump";
+            this.B_Dump.Text = "Dump to .TXT";
             this.B_Dump.UseVisualStyleBackColor = true;
             this.B_Dump.Click += new System.EventHandler(this.B_Dump_Click);
             // 
@@ -29868,11 +29869,23 @@
             this.CB_Pokemon_6_Pokemon.TabIndex = 21;
             this.CB_Pokemon_6_Pokemon.SelectedIndexChanged += new System.EventHandler(this.refreshSpeciesAbility);
             // 
+            // B_Randomize
+            // 
+            this.B_Randomize.Enabled = false;
+            this.B_Randomize.Location = new System.Drawing.Point(483, 27);
+            this.B_Randomize.Name = "B_Randomize";
+            this.B_Randomize.Size = new System.Drawing.Size(93, 23);
+            this.B_Randomize.TabIndex = 68;
+            this.B_Randomize.Text = "Randomize All";
+            this.B_Randomize.UseVisualStyleBackColor = true;
+            this.B_Randomize.Click += new System.EventHandler(this.B_Randomize_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 192);
+            this.Controls.Add(this.B_Randomize);
             this.Controls.Add(this.B_Dump);
             this.Controls.Add(this.B_OpenTRDATA);
             this.Controls.Add(this.B_OpenTRPOKE);
@@ -30074,6 +30087,7 @@
         private System.Windows.Forms.ComboBox CB_Pokemon_6_Level;
         private System.Windows.Forms.Label label55;
         private System.Windows.Forms.ComboBox CB_Pokemon_6_Pokemon;
+        private System.Windows.Forms.Button B_Randomize;
     }
 }
 

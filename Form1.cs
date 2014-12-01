@@ -1464,7 +1464,6 @@ namespace RSTE
                 CB_TrainerID.SelectedIndex = i;
                 string tdata = getTRSummary();
                 toret += tdata;
-                System.Diagnostics.Debug.WriteLine(i);
             }
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.FileName = "Battles.txt";
@@ -1786,6 +1785,29 @@ namespace RSTE
             start = false;
             readFile();
             System.Media.SystemSounds.Asterisk.Play();
+        }
+
+        public static bool rPKM, rMove, rAbility, rDiffAI, rDiffIV, rClass, rGift, rItem, rDoRand;
+        public static decimal rGiftPercent;
+        private void B_Randomize_Click(object sender, EventArgs e)
+        {
+            rPKM = rMove = rAbility = rDiffAI = rDiffIV = rClass = rGift = rItem = rDoRand = false; // init to false
+            rGiftPercent = 0; // 0
+            (new Randomizer()).ShowDialog(); // Open Randomizer Config to get config vals
+            if (rDoRand)
+                Randomize();
+        }
+        private void Randomize()
+        {
+            return;
+            for (int i = 1; i < 950; i++)
+            {
+                CB_TrainerID.SelectedIndex = i;
+
+                B_SaveEntry.PerformClick(); // Save Changes
+            }
+            CB_TrainerID.SelectedIndex = 1;
+            MessageBox.Show("Randomized all trainers according to specification!\n\nPress the Dump to TXT to view the new trainer information!","Alert");
         }
     }
 }
