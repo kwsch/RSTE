@@ -216,7 +216,6 @@
             this.B_Dump.TabIndex = 67;
             this.B_Dump.Text = "Dump";
             this.B_Dump.UseVisualStyleBackColor = true;
-            this.B_Dump.Visible = false;
             this.B_Dump.Click += new System.EventHandler(this.B_Dump_Click);
             // 
             // B_OpenTRDATA

@@ -1424,36 +1424,42 @@ namespace RSTE
         // Dumping
         private string getTRSummary()
         {
-            string toret = "======\n\n";
+            string toret = "======\n";
 
-            toret += CB_Trainer_Class.Text.Substring(0, CB_Trainer_Class.Text.Length - 6) + " " + CB_TrainerID.Text + "\n\n";
-            toret += "======\n\n";
+            toret += CB_TrainerID.SelectedIndex + " - " + CB_Trainer_Class.Text.Substring(6, CB_Trainer_Class.Text.Length - 6) + " " + CB_TrainerID.Text.Substring(6, CB_TrainerID.Text.Length - 6) + "\n";
+            toret += "======\n";
             int pkm = CB_numPokemon.SelectedIndex;
-            toret += "Pokemon: " + pkm + "\n\n";
+            toret += "Pokemon: " + pkm + "\n";
             for (int i = 0; i < pkm; i++)
             {
-                toret += trpk_pkm[i].SelectedIndex + " (Lv. " + trpk_lvl[i].SelectedIndex + ") ";
+                toret += trpk_pkm[i].Text + " (Lv. " + trpk_lvl[i].SelectedIndex + ") ";
                 if (trpk_item[i].SelectedIndex > 0)
-                    toret += "@" + trpk_item[i].SelectedIndex;
+                    toret += "@" + trpk_item[i].Text;
                 if (trpk_abil[i].SelectedIndex != 0)
-                    toret += " (Ability: " + trpk_abil[i].SelectedIndex + ")";
+                {
+                    string abil = trpk_abil[i].Text;
+                    abil = abil.Substring(0, abil.Length - 4);
+                    toret += " (Ability: " + abil + ")";
+                }
                 if (checkBox_Moves.Checked)
                 {
                     toret += " (Moves: ";
-                    toret += trpk_m1[i].SelectedIndex + "/";
-                    toret += trpk_m2[i].SelectedIndex + "/";
-                    toret += trpk_m3[i].SelectedIndex + "/";
-                    toret += trpk_m4[i].SelectedIndex + ")";
+                    if (trpk_m1[i].SelectedIndex > 0) toret += trpk_m1[i].Text;
+                    if (trpk_m2[i].SelectedIndex > 0) toret += " / " + trpk_m2[i].Text;
+                    if (trpk_m3[i].SelectedIndex > 0) toret += " / " + trpk_m3[i].Text;
+                    if (trpk_m4[i].SelectedIndex > 0) toret += " / " + trpk_m4[i].Text;
+                    toret += ")";
                 }
                 toret += " IVs: All " + (Convert.ToInt32(trpk_IV[i].SelectedIndex) / 8);
-                toret += "\n\n";
+                toret += "\n";
             }
+            toret += "\n";
             return toret;
         }
         private void B_Dump_Click(object sender, EventArgs e)
         {
             string toret = "";
-            for (int i = 0; i < 950; i++)
+            for (int i = 1; i < 950; i++)
             {
                 CB_TrainerID.SelectedIndex = i;
                 string tdata = getTRSummary();
@@ -1463,6 +1469,8 @@ namespace RSTE
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.FileName = "Battles.txt";
             sfd.Filter = "Text File|*.txt";
+            
+            System.Media.SystemSounds.Asterisk.Play();
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 string path = sfd.FileName;
@@ -1572,23 +1580,23 @@ namespace RSTE
             using (BinaryWriter bw = new BinaryWriter(ms))
             {
                 bw.BaseStream.Position = 0;
-                bw.Write(BitConverter.GetBytes((ushort)format));
-                bw.Write(BitConverter.GetBytes((ushort)CB_Trainer_Class.SelectedIndex));
+                bw.Write((ushort)format);
+                bw.Write((ushort)CB_Trainer_Class.SelectedIndex);
                 bw.Write((byte)0);
                 bw.Write((byte)0);
                 bw.Write((byte)CB_Battle_Type.SelectedIndex);
                 bw.Write((byte)CB_numPokemon.SelectedIndex);
-                bw.Write(BitConverter.GetBytes((ushort)CB_Item_1.SelectedIndex));
-                bw.Write(BitConverter.GetBytes((ushort)CB_Item_2.SelectedIndex));
-                bw.Write(BitConverter.GetBytes((ushort)CB_Item_3.SelectedIndex));
-                bw.Write(BitConverter.GetBytes((ushort)CB_Item_4.SelectedIndex));
+                bw.Write((ushort)CB_Item_1.SelectedIndex);
+                bw.Write((ushort)CB_Item_2.SelectedIndex);
+                bw.Write((ushort)CB_Item_3.SelectedIndex);
+                bw.Write((ushort)CB_Item_4.SelectedIndex);
                 bw.Write((byte)CB_AI.SelectedIndex);
                 bw.Write((byte)0);
                 bw.Write((byte)0);
                 bw.Write((byte)0);
                 bw.Write((byte)Convert.ToByte(checkBox_Healer.Checked));
                 bw.Write((byte)CB_Money.SelectedIndex);
-                bw.Write(BitConverter.GetBytes((ushort)CB_Prize.SelectedIndex));
+                bw.Write((ushort)CB_Prize.SelectedIndex);
 
                 File.WriteAllBytes(trdatapaths[index], ms.ToArray());
             }
@@ -1602,19 +1610,19 @@ namespace RSTE
                     bw.Write((byte)trpk_IV[i].SelectedIndex);
                     byte PID = (byte)((trpk_abil[i].SelectedIndex << 4) + trpk_gender[i].SelectedIndex);
                     bw.Write((byte)PID);
-                    bw.Write(BitConverter.GetBytes((ushort)trpk_lvl[i].SelectedIndex));
+                    bw.Write((ushort)trpk_lvl[i].SelectedIndex);
 
-                    bw.Write(BitConverter.GetBytes((ushort)trpk_pkm[i].SelectedIndex));
-                    bw.Write(BitConverter.GetBytes((ushort)trpk_form[i].SelectedIndex));
+                    bw.Write((ushort)trpk_pkm[i].SelectedIndex);
+                    bw.Write((ushort)trpk_form[i].SelectedIndex);
 
                     if (((format) & 1) == 1) // Items Exist in Data
-                        bw.Write(BitConverter.GetBytes((ushort)trpk_item[i].SelectedIndex));
+                        bw.Write((ushort)trpk_item[i].SelectedIndex);
                     if (((format >> 1) & 1) == 1) // Moves Exist in Data
                     {
-                        bw.Write(BitConverter.GetBytes((ushort)trpk_m1[i].SelectedIndex));
-                        bw.Write(BitConverter.GetBytes((ushort)trpk_m2[i].SelectedIndex));
-                        bw.Write(BitConverter.GetBytes((ushort)trpk_m3[i].SelectedIndex));
-                        bw.Write(BitConverter.GetBytes((ushort)trpk_m4[i].SelectedIndex));
+                        bw.Write((ushort)trpk_m1[i].SelectedIndex);
+                        bw.Write((ushort)trpk_m2[i].SelectedIndex);
+                        bw.Write((ushort)trpk_m3[i].SelectedIndex);
+                        bw.Write((ushort)trpk_m4[i].SelectedIndex);
                     }
                 }
                 File.WriteAllBytes(trpokepaths[index],ms.ToArray());
