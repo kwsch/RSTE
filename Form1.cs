@@ -963,6 +963,11 @@ namespace RSTE
 
             return stringdata;
         }
+        internal static Random rand = new Random();
+        internal static uint rnd32()
+        {
+            return (uint)(rand.Next(1 << 30)) << 2 | (uint)(rand.Next(1 << 2));
+        }
         bool start = true;
         bool loading = true;
         #region Global Variables
@@ -1572,7 +1577,7 @@ namespace RSTE
         {
             // fetch trainer format we're saving as
             int index = CB_TrainerID.SelectedIndex;
-            ushort format = (ushort)(Convert.ToByte(checkBox_Moves.Checked) + Convert.ToByte(checkBox_Item.Checked) << 1);
+            ushort format = (ushort)(Convert.ToByte(checkBox_Moves.Checked) + (Convert.ToByte(checkBox_Item.Checked) << 1));
 
             // Write Trainer Data
             using (MemoryStream ms = new MemoryStream())
@@ -1614,9 +1619,9 @@ namespace RSTE
                     bw.Write((ushort)trpk_pkm[i].SelectedIndex);
                     bw.Write((ushort)trpk_form[i].SelectedIndex);
 
-                    if (((format) & 1) == 1) // Items Exist in Data
+                    if (((format >> 1) & 1) == 1) // Items Exist in Data
                         bw.Write((ushort)trpk_item[i].SelectedIndex);
-                    if (((format >> 1) & 1) == 1) // Moves Exist in Data
+                    if (((format) & 1) == 1) // Moves Exist in Data
                     {
                         bw.Write((ushort)trpk_m1[i].SelectedIndex);
                         bw.Write((ushort)trpk_m2[i].SelectedIndex);
@@ -1683,6 +1688,7 @@ namespace RSTE
                 this.AllowDrop = false;
                 Setup();
             }
+            else this.AllowDrop = true;
         }
 
         private void Setup()
@@ -1690,7 +1696,7 @@ namespace RSTE
             start = true;
             // Game Detection
             if (trpokepaths.Length != 950)
-                if (MessageBox.Show(String.Format("Improper amount of trainer files for OR/AS. Continue?\n\ntrdata: {0}\ntrpoke{1}\n\nExpected 950...", trdatapaths.Length, trpokepaths.Length), "Alert", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                if (MessageBox.Show(String.Format("Improper amount of trainer files for OR/AS. Continue?\n\ntrdata: {0}\ntrpoke: {1}\n\nExpected 950...", trdatapaths.Length, trpokepaths.Length), "Alert", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 {
                     B_OpenTRDATA.Enabled = B_OpenTRPOKE.Enabled = true;
                     checkEnabled(); // re-trigger to disable everything and let the user re-enter.
@@ -1738,7 +1744,7 @@ namespace RSTE
 
                 trpk_gender[i].Items.Clear();
                 trpk_gender[i].Items.Add("♂ / M");
-                trpk_gender[i].Items.Add("♀ / M");
+                trpk_gender[i].Items.Add("♀ / F");
                 trpk_gender[i].Items.Add("- / G");
 
                 trpk_form[i].Items.Add("");
@@ -1799,10 +1805,150 @@ namespace RSTE
         }
         private void Randomize()
         {
-            return;
             for (int i = 1; i < 950; i++)
             {
-                CB_TrainerID.SelectedIndex = i;
+                CB_TrainerID.SelectedIndex = i; // data is loaded
+
+                // Setup
+                checkBox_Moves.Checked = rMove;
+                checkBox_Item.Checked = rItem;
+                DataTable dt = Util.SpeciesTable();
+
+                // Randomize Trainer Stats
+                if (rDiffAI)
+                    CB_AI.SelectedIndex = CB_AI.Items.Count - 1; // max
+                if (rClass)
+                    CB_Trainer_Class.SelectedIndex = (int)(rnd32() % (CB_Trainer_Class.Items.Count));
+
+                if (rGift && rnd32() % 100 < rGiftPercent)
+                #region Random Prize Logic
+                {
+                    uint rand = rnd32() % 10;
+                    int[] itemlist;
+                    if (rand < 2) // held item
+                    {
+                        itemlist = new int[] 
+                        {
+                        000,001,002,003,004,005,006,007,008,009,010,011,012,013,014,015,016,055,056,
+                        057,058,059,060,061,062,063,064,065,066,067,068,069,070,071,072,073,074,075,
+                        076,077,078,079,080,081,082,083,084,085,086,087,088,089,090,091,092,093,094,
+                        099,100,101,102,103,104,105,106,107,108,109,110,112,116,117,118,119,135,136,
+                        213,214,215,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,
+                        233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,
+                        252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,
+                        271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,
+                        290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,
+                        309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,
+                        492,493,494,495,496,497,498,499,500,537,538,539,540,541,542,543,544,545,546,
+                        547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,571,
+                        572,573,576,577,580,581,582,583,584,585,586,587,588,589,590,639,640,644,646,
+                        647,648,649,650,652,653,654,655,656,657,658,659,660,661,662,663,664,665,666,
+                        667,668,669,670,671,672,673,674,675,676,677,678,679,680,681,682,683,684,685,
+                        699,704,710,711,715,
+
+                        // ORAS
+                        534,535,
+                        752,753,754,755,756,757,758,759,760,761,762,763,764,767,768,769,770,
+                        };
+                    }
+                    else if (rand < 5) // medicine
+                    {
+                        itemlist = new int[] 
+                        {
+                        000,017,018,019,020,021,022,023,024,025,026,027,028,029,030,031,032,033,
+                        034,035,036,037,038,039,040,041,042,043,044,045,046,047,048,049,050,051,
+                        052,053,054,134,504,565,566,567,568,569,570,571,591,645,708,709,
+                        };
+                    }
+                    else // berry
+                    {
+                        itemlist = new int[] 
+                    {
+                        0,149,150,151,152,153,154,155,156,157,158,159,160,161,162,
+                        163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,
+                        178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,
+                        193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,
+                        208,209,210,211,212,686,687,688,
+                    };
+                    }
+                    CB_Prize.SelectedIndex = (int)itemlist[(rnd32() % itemlist.Length)];
+                }
+                #endregion
+                else if (rGift)
+                    CB_Prize.SelectedIndex = 0;
+
+                // Randomize Pokemon
+                for (int p = 0; p < CB_numPokemon.SelectedIndex; p++)
+                {
+                    if (rPKM)
+                    {
+                        // randomize pokemon
+                        int species = (int)(rnd32() % 722);
+                        trpk_pkm[p].SelectedIndex = species;
+                        // Set Gender
+                        {
+                            int gv = (int)dt.Rows[species][1];
+                            int g = (int)(rnd32() % 256);
+                            if (gv == 258) // genderless
+                                g = 2;
+                            else if (gv == 257) // female only
+                                g = 1;
+                            else if (gv == 256) // male only
+                                g = 0;
+                            else
+                                g = Convert.ToInt16(g < gv); // if greater than, is female
+
+                            trpk_gender[p].SelectedIndex = g;
+                        }
+
+                        // randomize form
+                        int forms = (trpk_form[p].Items.Count - 1);
+                        if (forms > 0)
+                            trpk_form[p].SelectedIndex = (int)(rnd32() % (forms + 1));
+                    }
+                    if (rAbility)
+                        trpk_abil[p].SelectedIndex = (int)(1 + rnd32() % 3);
+                    if (rDiffIV)
+                        trpk_IV[p].SelectedIndex = 255;
+                    if (rItem)
+                        #region RandomItem
+                    {
+                        int[] itemlist = new int[] 
+                        {
+                        000,001,002,003,004,005,006,007,008,009,010,011,012,013,014,015,016,055,056,
+                        057,058,059,060,061,062,063,064,065,066,067,068,069,070,071,072,073,074,075,
+                        076,077,078,079,080,081,082,083,084,085,086,087,088,089,090,091,092,093,094,
+                        099,100,101,102,103,104,105,106,107,108,109,110,112,116,117,118,119,135,136,
+                        213,214,215,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,
+                        233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,
+                        252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,
+                        271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,
+                        290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,
+                        309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,
+                        492,493,494,495,496,497,498,499,500,537,538,539,540,541,542,543,544,545,546,
+                        547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564,571,
+                        572,573,576,577,580,581,582,583,584,585,586,587,588,589,590,639,640,644,646,
+                        647,648,649,650,652,653,654,655,656,657,658,659,660,661,662,663,664,665,666,
+                        667,668,669,670,671,672,673,674,675,676,677,678,679,680,681,682,683,684,685,
+                        699,704,710,711,715,
+
+                        // ORAS
+                        534,535,
+                        752,753,754,755,756,757,758,759,760,761,762,763,764,767,768,769,770,
+                        };
+
+                        trpk_item[p].SelectedIndex = (int)itemlist[(rnd32() % itemlist.Length)];
+
+                    }
+                    #endregion
+                    if (rMove)
+                    {
+                        trpk_m1[p].SelectedIndex = (int)(rnd32() % (trpk_m1[p].Items.Count));
+                        trpk_m2[p].SelectedIndex = (int)(rnd32() % (trpk_m2[p].Items.Count));
+                        trpk_m3[p].SelectedIndex = (int)(rnd32() % (trpk_m3[p].Items.Count));
+                        trpk_m4[p].SelectedIndex = (int)(rnd32() % (trpk_m4[p].Items.Count));
+                    }
+                }
 
                 B_SaveEntry.PerformClick(); // Save Changes
             }

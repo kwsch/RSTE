@@ -113,21 +113,20 @@
             // CHK_MaxDiffAI
             // 
             this.CHK_MaxDiffAI.AutoSize = true;
-            this.CHK_MaxDiffAI.Checked = true;
-            this.CHK_MaxDiffAI.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CHK_MaxDiffAI.Location = new System.Drawing.Point(12, 91);
+            this.CHK_MaxDiffAI.Location = new System.Drawing.Point(12, 104);
             this.CHK_MaxDiffAI.Name = "CHK_MaxDiffAI";
-            this.CHK_MaxDiffAI.Size = new System.Drawing.Size(144, 17);
+            this.CHK_MaxDiffAI.Size = new System.Drawing.Size(219, 17);
             this.CHK_MaxDiffAI.TabIndex = 6;
-            this.CHK_MaxDiffAI.Text = "Max Difficulty (Trainer AI)";
+            this.CHK_MaxDiffAI.Text = "[NOT VISIBLE] Max Difficulty (Trainer AI)";
             this.CHK_MaxDiffAI.UseVisualStyleBackColor = true;
+            this.CHK_MaxDiffAI.Visible = false;
             // 
             // CHK_MaxDiffPKM
             // 
             this.CHK_MaxDiffPKM.AutoSize = true;
             this.CHK_MaxDiffPKM.Checked = true;
             this.CHK_MaxDiffPKM.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CHK_MaxDiffPKM.Location = new System.Drawing.Point(12, 114);
+            this.CHK_MaxDiffPKM.Location = new System.Drawing.Point(12, 81);
             this.CHK_MaxDiffPKM.Name = "CHK_MaxDiffPKM";
             this.CHK_MaxDiffPKM.Size = new System.Drawing.Size(161, 17);
             this.CHK_MaxDiffPKM.TabIndex = 7;
@@ -156,10 +155,12 @@
             // 
             // NUD_GiftPercent
             // 
+            this.NUD_GiftPercent.Enabled = false;
             this.NUD_GiftPercent.Location = new System.Drawing.Point(163, 167);
             this.NUD_GiftPercent.Name = "NUD_GiftPercent";
             this.NUD_GiftPercent.Size = new System.Drawing.Size(43, 20);
             this.NUD_GiftPercent.TabIndex = 10;
+            this.NUD_GiftPercent.ValueChanged += new System.EventHandler(this.changePercent);
             // 
             // label1
             // 

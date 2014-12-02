@@ -60,6 +60,7 @@
     <Compile Include="Randomizer.Designer.cs">
       <DependentUpon>Randomizer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -41,6 +41,12 @@ namespace RSTE
         private void CHK_RandomGift_CheckedChanged(object sender, EventArgs e)
         {
             NUD_GiftPercent.Enabled = CHK_RandomGift.Checked;
+            NUD_GiftPercent.Value = Convert.ToDecimal(CHK_RandomGift.Checked);
+        }
+
+        private void changePercent(object sender, EventArgs e)
+        {
+            CHK_RandomGift.Checked = (NUD_GiftPercent.Value != 0);
         }
     }
 }
